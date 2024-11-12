@@ -1,80 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import axios from "axios";
+
+export const ApiData = createContext();
+
+export function useApi() {
+  return useContext(ApiData);
+}
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5); // Default items per page
+  const [selected, setSelected] = useState([]);
 
-  const API = "https://jsonplaceholder.typicode.com/posts";
-
-  // Fetch data
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(API);
-      setData(res.data);
-    } catch (error) {
-      console.log("error", error);
-    }
+  const API = "https://jsonplaceholder.typicode.com/Posts";
+  const fetchedData = async () => {
+    const res = await axios.get(API);
+    setData(res.data);
   };
-
   useEffect(() => {
-    fetchData();
+    fetchedData();
   }, []);
-
-  // Calculate total pages
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  // Handle changing items per page
-  const handleItemsPerPageChange = (event) => {
-    setItemsPerPage(Number(event.target.value));
-    setCurrentPage(1); // Reset to first page when items per page changes
+  const selectedDatas = (range) => {
+    let filteredData = [];
+    if (range == "1-10") {
+      filteredData = data.filter((x) => x.id >= 1 && x.id <= 10);
+    } else if (range == "10-20") {
+      filteredData = data.filter((x) => x.id >= 11 && x.id <= 20);
+    } else if (range == "20-30") {
+      filteredData = data.filter((x) => x.id >= 21 && x.id <= 30);
+    }
+    setSelected(filteredData);
+    console.log("filteredData", filteredData);
   };
 
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Get current data to display based on pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
-
+  console.log("data", data);
   return (
-    <div className="app-container">
-      <h1>Pagination Example</h1>
+    <ApiData.Provider value={{ data, selectedDatas, selected }}>
+      <Outlet />
 
-      {/* Dropdown for selecting items per page */}
-      <label>
-        Items per page:
-        <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-        </select>
-      </label>
-
-      {/* Display current page data */}
-      <ul>
-        {currentData.map((item) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-
-      {/* Pagination controls */}
-      <div className="pagination-controls">
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            disabled={index + 1 === currentPage}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
-    </div>
+      {/* {data.title} */}
+    </ApiData.Provider>
   );
 };
 
