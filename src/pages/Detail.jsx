@@ -4,10 +4,10 @@ import { useApi } from "../App";
 const Detail = () => {
   const { data, dataCount, setDataCount } = useApi();
 
-  // Function to update data count based on some logic (for demonstration)
+  // Function to update data count based on some logic
   const handleUpdateCount = () => {
     const newCount = data.length; // Here, we simply use the existing data length
-    setDataCount(newCount); // Update count in context
+    setDataCount(newCount); // Update count in context that sends value in app.jsx
     console.log("newcount", newCount);
   };
   console.log("data", data);
