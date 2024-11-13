@@ -5,7 +5,10 @@ const Home = () => {
   const { data } = useApi();
 
   const [selectedData, setSelectedData] = useState([]);
+
   useEffect(() => {
+    // used this to display data at first without selecting any range
+    // data dependecines so that everytime data is chnaged it displaysdata and useeffect is runs. Used data dependecy because at first nothing was displayed as i assumed data wasn't fetched so used dependency
     const filteredData = data.filter((x) => x.id >= 1 && x.id <= 10);
     setSelectedData(filteredData);
     console.log("displayData", filteredData);
