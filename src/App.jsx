@@ -31,6 +31,7 @@ const App = () => {
   return (
     <ApiData.Provider value={{ data, setData, dataCount, setDataCount }}>
       <Outlet />
+      
 
       {/* {data.title} */}
     </ApiData.Provider>

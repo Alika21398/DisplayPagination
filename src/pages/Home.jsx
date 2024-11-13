@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useApi } from "../App";
-import axios from "axios";
+
 
 const Home = () => {
   const { data } = useApi();
