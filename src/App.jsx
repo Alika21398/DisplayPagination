@@ -10,32 +10,26 @@ export function useApi() {
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [dataCount, setDataCount] = useState(0);
 
   const API = "https://jsonplaceholder.typicode.com/Posts";
   const fetchedData = async () => {
-    const res = await axios.get(API);
-    setData(res.data);
+    try {
+      const res = await axios.get(API);
+      setData(res.data);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   useEffect(() => {
     fetchedData();
   }, []);
-  const selectedDatas = (range) => {
-    let filteredData = [];
-    if (range == "1-10") {
-      filteredData = data.filter((x) => x.id >= 1 && x.id <= 10);
-    } else if (range == "10-20") {
-      filteredData = data.filter((x) => x.id >= 11 && x.id <= 20);
-    } else if (range == "20-30") {
-      filteredData = data.filter((x) => x.id >= 21 && x.id <= 30);
-    }
-    setSelected(filteredData);
-    console.log("filteredData", filteredData);
-  };
 
   console.log("data", data);
+  console.log("appcount", dataCount);
+
   return (
-    <ApiData.Provider value={{ data, selectedDatas, selected }}>
+    <ApiData.Provider value={{ data, setData, dataCount, setDataCount }}>
       <Outlet />
 
       {/* {data.title} */}

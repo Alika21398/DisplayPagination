@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApi } from "../App";
+import axios from "axios";
 
 const Home = () => {
-  const { selected, selectedDatas} = useApi();
-  
+  const { data } = useApi();
 
- 
+  const [selected, setSelected] = useState([]);
+
+  const selectedDatas = (range) => {
+    let filteredData = [];
+    if (range == "1-10") {
+      filteredData = data.filter((x) => x.id >= 1 && x.id <= 10);
+    } else if (range == "10-20") {
+      filteredData = data.filter((x) => x.id >= 11 && x.id <= 20);
+    } else if (range == "20-30") {
+      filteredData = data.filter((x) => x.id >= 21 && x.id <= 30);
+    }
+    setSelected(filteredData);
+    console.log("filteredData", filteredData);
+  };
 
   console.log("select", selected);
 
@@ -46,7 +59,6 @@ const Home = () => {
           );
         }, [])}
       </div>
-     
     </>
   );
 };
