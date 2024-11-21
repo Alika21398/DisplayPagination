@@ -48,6 +48,11 @@ const Home = () => {
     setSelectedData(data.slice(startIndex, endIndex));
   };
 
+  var pageNumbers = []
+  for(let i=1;i<=totalPages; i++){
+    pageNumbers.push(i)
+  }
+
   console.log("select", selectedData);
 
   return (
@@ -75,6 +80,20 @@ const Home = () => {
               ))}
             </select>
           </div>
+          <div className="flex justify-between">
+            {pageNumbers.map((n, index)=>{
+              return(
+                <div key={index}>
+                {currentPage == n ? <div style={{color: "blue", padding: "4px", fontWeight: "black"}}>
+                  {n}
+                </div>
+                : <div style={{padding:"4px"}}>{n}</div>}
+              </div>
+
+              )
+              
+            })}
+          </div>
 
           {/* pagination for paging  */}
           <div className="flex gap-5  justify-end items-center">
@@ -84,7 +103,8 @@ const Home = () => {
             >
               prev
             </button>
-            <div>{currentPage}</div>
+            <div>{((currentPage - 1) * selectedRange) + 1} - {currentPage * selectedRange} of {data.length}</div>
+            {/* <div>{currentPage}</div> */}
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage == totalPages}
